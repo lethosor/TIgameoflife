@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(tigol)
+project(game_of_life)
 set(CMAKE_BUILD_TYPE Release)
 
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
@@ -27,26 +27,26 @@ if("${HEX2BIN}" STREQUAL "HEX2BIN-NOTFOUND")
     message(FATAL_ERROR "Could not locate hex2bin")
 endif()
 
-add_executable(tigol
-    tigol.c
+add_executable(game_of_life
+    game_of_life.c
     inc/ti84plus.c
     inc/tios_crt0.s
     inc/fastcopy.asm
 )
 
-add_custom_command(TARGET tigol POST_BUILD
-    COMMAND ${HEX2BIN} tigol.ihx
-    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/depends/binpac8x.py -O conway tigol.bin tigol.8xp
+add_custom_command(TARGET game_of_life POST_BUILD
+    COMMAND ${HEX2BIN} game_of_life.ihx
+    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/depends/binpac8x.py -O conway game_of_life.bin game_of_life.8xp
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMENT "Converting to binary"
 )
 
 set(TIGOL_GENERATED_FILES
-    ${CMAKE_BINARY_DIR}/tigol.8xp
-    ${CMAKE_BINARY_DIR}/tigol.bin
-    ${CMAKE_BINARY_DIR}/tigol.lk
-    ${CMAKE_BINARY_DIR}/tigol.map
-    ${CMAKE_BINARY_DIR}/tigol.noi
+    ${CMAKE_BINARY_DIR}/game_of_life.8xp
+    ${CMAKE_BINARY_DIR}/game_of_life.bin
+    ${CMAKE_BINARY_DIR}/game_of_life.lk
+    ${CMAKE_BINARY_DIR}/game_of_life.map
+    ${CMAKE_BINARY_DIR}/game_of_life.noi
 )
 
 set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${TIGOL_GENERATED_FILES}")
