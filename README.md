@@ -20,7 +20,7 @@ To compile the program, you will need the following software:
 The included Makefile assumes all these programs are in your system path.
 On Linux, it may also be necessary to change the permissions of binpac8x.py so you can execute it: `chmod +x binpac8x.py`.
 
-### Linux
+### Linux/OS X
 To compile:
 
     git clone https://github.com/mortonsc/TIgameoflife.git
@@ -29,6 +29,13 @@ That's it!
 
 ### Windows
 All the required software is available for Windows, so it should be possible to compile, but I haven't tried.
+
+### Using CMake
+
+    git clone https://github.com/mortonsc/TIgameoflife.git
+    mkdir build && cd build
+    cmake .. -DCMAKE_TOOLCHAIN_FILE=../CMake/sdcc.cmake
+    make
 
 ## Installation
 Currently the only way to obtain an executable is to follow the compilation process above.

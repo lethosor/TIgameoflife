@@ -12,3 +12,4 @@ inc/ti83plus.inc
 *.8xp
 *.bin
 *.ihx
+build*/
