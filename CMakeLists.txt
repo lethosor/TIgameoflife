@@ -27,27 +27,26 @@ if("${HEX2BIN}" STREQUAL "HEX2BIN-NOTFOUND")
     message(FATAL_ERROR "Could not locate hex2bin")
 endif()
 
-add_executable(tigol-raw
+add_executable(tigol
     tigol.c
     inc/ti84plus.c
     inc/tios_crt0.s
     inc/fastcopy.asm
 )
 
-# This command actually only generates tigol-raw.bin, but specifying the other
-# files causes CMake to track them and "make clean" to remove them
-add_custom_command(OUTPUT tigol-raw.bin tigol-raw.lk tigol-raw.noi tigol-raw.map
-    DEPENDS tigol-raw
-    COMMAND "${HEX2BIN}" tigol-raw.ihx
-    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+add_custom_command(TARGET tigol POST_BUILD
+    COMMAND ${HEX2BIN} tigol.ihx
+    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/depends/binpac8x.py -O conway tigol.bin tigol.8xp
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMENT "Converting to binary"
 )
 
-add_custom_command(OUTPUT tigol.8xp
-    DEPENDS tigol-raw.bin
-    COMMAND "${PYTHON_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/depends/binpac8x.py" -O conway tigol-raw.bin tigol.8xp
-    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-    COMMENT "Packing program"
+set(TIGOL_GENERATED_FILES
+    ${CMAKE_BINARY_DIR}/tigol.8xp
+    ${CMAKE_BINARY_DIR}/tigol.bin
+    ${CMAKE_BINARY_DIR}/tigol.lk
+    ${CMAKE_BINARY_DIR}/tigol.map
+    ${CMAKE_BINARY_DIR}/tigol.noi
 )
 
-add_custom_target(tigol ALL DEPENDS tigol.8xp)
+set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${TIGOL_GENERATED_FILES}")
